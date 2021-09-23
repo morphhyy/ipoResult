@@ -9,6 +9,10 @@ const getData = async () => {
     try {
         const res = await fetch(url + "result/companyShares/fileUploaded");
         const data = await res.json()
+        if(data.error) {
+            console.log("Data Not Found!")
+            process.exit(1)
+        }
         return data
     } catch(err) {
         console.error("Error: ", err.message)
@@ -18,7 +22,6 @@ const getData = async () => {
 
 try {
     getData().then(data => {
-        
         const details = []
         data.body.map(company => {
             details.push({id:company.id, name:company.name })
