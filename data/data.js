@@ -1,11 +1,11 @@
 const boidInfo = [
   {
-    name: '',
-    boid: '',
+    name: 'Shivaji Chalise',
+    boid: '1301090001823339',
   },
   {
-    name: '',
-    boid: '',
+    name: 'lol',
+    boid: '2141',
   },
   {
     name: '',

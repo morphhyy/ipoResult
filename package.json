@@ -1,12 +1,12 @@
 {
   "dependencies": {
+    "colors": "^1.4.0",
     "node-fetch": "^2.6.1",
     "prompt-sync": "^4.2.0"
   },
   "name": "share",
   "version": "1.0.0",
   "main": "index.js",
-  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

@@ -1,5 +1,6 @@
 import fetch from 'node-fetch'
 import boidInfo from './data/data.js'
+import colors from 'colors'
 import promptSync from 'prompt-sync'
 
 const prompt = promptSync()
@@ -39,16 +40,30 @@ try {
         body: `{"companyShareId":"${userID}","boid":"${v}"}`,
         method: 'POST',
       })
-
-      const data = await res.json()
-      return data
+      try {
+        const data = await res.json()
+        return data
+      } catch (error) {
+        console.log('Something went wrong!'.red.bold.underline)
+      }
     }
 
     const checking = details.filter((a) => a.id == userID)[0]
-    console.log(`\nChecking Result of ${checking.name}!\n`)
+    console.log('Checking Result of', `${checking.name}`.cyan.underline, '\n')
     boidInfo.map((user) => {
       if (user.boid) {
-        result(user.boid).then((r) => console.log(user.boid, '=>', r.message))
+        result(user.boid).then((r) =>
+          typeof r === 'undefined'
+            ? console.log(
+                `${user.name} => Possible Error: Incorrect BOID`.yellow
+              )
+            : console.log(
+                `Congratulations! ${
+                  user.name
+                }. IPO Alloted. Alloted quantity: ${r.message.split(' ')[6]} `
+                  .bgGreen.black
+              )
+        )
       }
     })
   })
