@@ -10,7 +10,7 @@ simple nodejs app for checking ipo results
   npm install
 ```
 
-2. Add your name and BOID in data/data.js
+2. Add your name and BOID in `./data/data.js`
 
 ```
 {
