@@ -1,13 +1,26 @@
-## To install project dependencies
-```bash
+# Check Ipo Result
+
+simple nodejs app for checking ipo results
+
+## Usage
+
+1. Install dependencies
+
+```
   npm install
 ```
 
+2. Add your name and BOID in data/data.js
 
-``Add IPO details in data.js``
+```
+{
+  name: '<your-name>',
+  boid : '<your boid>'
+}
+```
 
-## How to Use?
+3. Execute
 
 ```bash
-  node run.js
+  node app.js
 ```
