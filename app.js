@@ -57,12 +57,15 @@ try {
             ? console.log(
                 `${user.name} => Possible Error: Incorrect BOID`.yellow
               )
-            : console.log(
+            : r.success === true
+            ? console.log(
                 `Congratulations! ${
                   user.name
                 }. IPO Alloted. Alloted quantity: ${r.message.split(' ')[6]} `
                   .bgGreen.black
               )
+            : r.success === false &&
+              console.log(`${user.name} => Sorry not Alloted`.yellow)
         )
       }
     })
