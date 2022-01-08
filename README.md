@@ -1,25 +1,37 @@
 # Check Ipo Result
 
-simple nodejs app for checking ipo results
+Simple nodejs app for checking ipo results
 
 ## Usage
 
-1. Install dependencies
+1. Clone this project 
+
+```
+  git clone https://github.com/morphhyy/ipoResult.git
+```
+
+2. cd into the folder
+
+```
+  cd ipoResult
+```
+
+3. Install dependencies
 
 ```
   npm install
 ```
 
-2. Add your name and BOID in `./data/data.js`
+4. Add your name and BOID in `./data/data.js`
 
 ```
 {
-  name: '<your-name>',
+  name: '<your name>',
   boid : '<your boid>'
 }
 ```
 
-3. Execute
+5. Execute
 
 ```bash
   node app.js
