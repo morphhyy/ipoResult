@@ -2,6 +2,7 @@ import fetch from 'node-fetch'
 import boidInfo from './data/data.js'
 import colors from 'colors'
 import promptSync from 'prompt-sync'
+import terminalImage from 'terminal-image';
 
 const prompt = promptSync()
 const url = 'https://iporesult.cdsc.com.np/'
@@ -22,9 +23,9 @@ const getData = async () => {
 }
 
 try {
-  getData().then((data) => {
+  getData().then(async (data) => {
     const details = []
-    data.body.map((company) => {
+    data.body.companyShareList.map((company) => {
       details.push({ id: company.id, name: company.name })
     })
 
@@ -32,12 +33,18 @@ try {
     console.log('')
     const userID = prompt('Choose: ')
 
+    const captchaData = data.body.captchaData
+
+    const imgBuffer = Buffer.from(captchaData.captcha, 'base64')
+    const captchaImg = await terminalImage.buffer(imgBuffer, {height: '50%', width: '50%'})
+    console.log(captchaImg)
+    const usercaptcha = prompt('Enter Captcha: ')
     const result = async (v) => {
       const res = await fetch(url + 'result/result/check', {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: `{"companyShareId":"${userID}","boid":"${v}"}`,
+        body: `{"companyShareId":"${userID}","boid":"${v}","userCaptcha":"${usercaptcha}","captchaIdentifier":"${captchaData.captchaIdentifier}"}`,
         method: 'POST',
       })
       try {

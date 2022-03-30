@@ -2,7 +2,8 @@
   "dependencies": {
     "colors": "^1.4.0",
     "node-fetch": "^2.6.1",
-    "prompt-sync": "^4.2.0"
+    "prompt-sync": "^4.2.0",
+    "terminal-image": "^2.0.0"
   },
   "name": "share",
   "version": "1.0.0",
