@@ -2,13 +2,15 @@
   "dependencies": {
     "colors": "^1.4.0",
     "node-fetch": "^2.6.1",
-    "prompt-sync": "^4.2.0"
+    "prompt-sync": "^4.2.0",
+    "tesseract.js": "^2.1.5"
   },
   "name": "share",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ./app.js"
   },
   "keywords": [],
   "author": "",
