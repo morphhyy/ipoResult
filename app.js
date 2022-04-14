@@ -3,10 +3,16 @@ import boidInfo from "./data/data.js";
 import colors from "colors";
 import promptSync from "prompt-sync";
 import { createSpinner } from "nanospinner";
-import { createWorker, OEM } from "tesseract.js";
+import { config } from "dotenv";
+import fs from "fs";
 
+config();
 const prompt = promptSync();
 const url = "https://iporesult.cdsc.com.np/";
+const numbers = {
+  zero: "0", one: "1", two: "2", three: "3", four: "4",
+  five: "5", six: "6", seven: "7", eight: "8", nine: "9",
+};
 
 const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms));
 
@@ -39,16 +45,32 @@ const postData = async (userID, v, userCaptcha, captchaIdentifier) => {
   }
 };
 
-const workers = [];
-boidInfo.map((user) => {
-  if (user.boid)
-    workers.push(
-      createWorker({
-        cachePath: ".",
-        cacheMethod: "refresh",
-      })
-    );
-});
+const solveCaptcha = async (buffer) => {
+  try {
+    let captcha = "";
+    const data = await fetch(process.env.SPEECH_TO_TEXT_URL + "/v1/recognize", {
+      method: "POST",
+      headers: {
+        "Content-Type": "audio/wav",
+        Authorization:
+          "Basic " +
+          Buffer.from(
+            `apikey:${process.env.SPEECH_TO_TEXT_IAM_APIKEY}`
+          ).toString("base64"),
+      },
+      body: buffer,
+    });
+
+    const res = await data.json();
+    const captchaWord = res.results[0].alternatives[0].transcript.split(" ");
+    captchaWord.map((d) => {
+      captcha += numbers[d];
+    });
+    return captcha;
+  } catch (err) {
+    console.error(err);
+  }
+};
 
 getData()
   .then((data) => {
@@ -60,51 +82,40 @@ getData()
 
     details.map((a) => console.log(a.id, "=>", a.name));
     console.log("");
-    const userID = prompt("Choose: ");
+    const userID = prompt("Choose: ", "1");
 
     const checking = details.filter((a) => a.id == userID)[0];
     console.log("Checking Result of", `${checking.name}`.cyan.underline, "\n");
 
-    const result = async (worker, v, captchaSpinner) => {
+    const result = async (v, captchaSpinner) => {
       let userCaptcha,
-        captcha,
+        audioCaptcha,
         captchaIdentifier = null;
 
-      await worker.load();
-      await worker.loadLanguage("eng");
-      await worker.initialize("eng");
-      await worker.setParameters({
-        init_oem: OEM.TESSERACT_LSTM_COMBINED,
-        tessedit_char_whitelist: "0123456789",
-      });
-
-      while (true) {
+      while (!/^(\d{5})$/.test(userCaptcha)) {
         let data = await getData();
-        ({ captcha, captchaIdentifier } = data.body.captchaData);
-        let captchaImg = Buffer.from(captcha, "base64");
-        let {
-          data: { text },
-        } = await worker.recognize(captchaImg);
-        userCaptcha = text.replace(/[^0-9]/g, "");
+        ({ audioCaptcha, captchaIdentifier } = data.body.captchaData);
+        let buffer = Buffer.from(audioCaptcha, "base64");
 
-        let results = await postData(userID, v, userCaptcha, captchaIdentifier);
-        if (
-          results.message &&
-          results.message !== "Invalid Captcha Provided. Please try again "
-        ) {
-          await worker.terminate();
-          captchaSpinner.success({ text: "Completed!" });
-          return results;
-        }
+        userCaptcha = await solveCaptcha(buffer);
+        userCaptcha = userCaptcha.replace(/[^0-9]/g, "");
+      }
+
+      let results = await postData(userID, v, userCaptcha, captchaIdentifier);
+      if (
+        results.message &&
+        results.message !== "Invalid Captcha Provided. Please try again "
+      ) {
+        captchaSpinner.success({ text: "Completed!" });
+        return results;
       }
     };
 
-    let workerIndex = 0;
     boidInfo.map(async (user) => {
       if (user.boid) {
         const captchaSpinner = createSpinner("Solving CAPTCHA...").start();
         await sleep();
-        result(workers[workerIndex++], user.boid, captchaSpinner).then((r) =>
+        result(user.boid, captchaSpinner).then((r) =>
           typeof r === "undefined"
             ? console.log(
                 `${user.name} => Possible Error: Incorrect BOID`.yellow + "\n"

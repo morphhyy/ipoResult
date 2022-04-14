@@ -1,10 +1,10 @@
 {
   "dependencies": {
     "colors": "^1.4.0",
+    "dotenv": "^16.0.0",
     "nanospinner": "^1.0.0",
     "node-fetch": "^2.6.1",
-    "prompt-sync": "^4.2.0",
-    "tesseract.js": "^2.1.5"
+    "prompt-sync": "^4.2.0"
   },
   "name": "share",
   "version": "1.0.0",
