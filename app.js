@@ -82,7 +82,12 @@ getData()
 
     details.map((a) => console.log(a.id, "=>", a.name));
     console.log("");
-    const userID = prompt("Choose: ", "1");
+    let userID = null
+    try {
+      userID = prompt("Choose: ");
+    } catch (e) {
+      userID = "1";
+    }
 
     const checking = details.filter((a) => a.id == userID)[0];
     console.log("Checking Result of", `${checking.name}`.cyan.underline, "\n");
