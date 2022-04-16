@@ -1,7 +1,7 @@
 const boidInfo = [
   {
-    name: '',
-    boid: '',
+    name: 'random',
+    boid: '1301370005081370',
   },
   {
     name: '',
