@@ -62,13 +62,18 @@ const solveCaptcha = async (buffer) => {
     });
 
     const res = await data.json();
+    if(res.error) {
+      console.log(`\nError: ${res.error}`.red.bold)
+      process.exit(1);
+    }
     const captchaWord = res.results[0].alternatives[0].transcript.split(" ");
     captchaWord.map((d) => {
       captcha += numbers[d];
     });
     return captcha;
   } catch (err) {
-    console.error(err);
+    console.error(`\nError: ${err.message.red}`);
+    process.exit(1);
   }
 };
 
@@ -90,7 +95,7 @@ getData()
     }
 
     const checking = details.filter((a) => a.id == userID)[0];
-    console.log("Checking Result of", `${checking.name}`.cyan.underline, "\n");
+    console.log("Checking Result of".green, `${checking.name}`.cyan.underline, "\n");
 
     const result = async (v, captchaSpinner) => {
       let userCaptcha,
@@ -139,6 +144,6 @@ getData()
     });
   })
   .catch((err) => {
-    console.error("Error:", err);
+    console.error(`\nError: ${err.message}`.red);
     process.exit(1);
   });
