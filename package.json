@@ -4,7 +4,8 @@
     "dotenv": "^16.0.0",
     "nanospinner": "^1.0.0",
     "node-fetch": "^2.6.1",
-    "prompt-sync": "^4.2.0"
+    "prompt-sync": "^4.2.0",
+    "tesseract.js": "^2.1.5"
   },
   "name": "share",
   "version": "1.0.0",
