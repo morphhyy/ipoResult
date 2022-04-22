@@ -34,5 +34,6 @@ Simple nodejs app for checking ipo results
 5. Execute
 
 ```bash
-  node app.js
+  node ocr.js
 ```
+``node app.js for watson-speech``
