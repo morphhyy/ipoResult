@@ -33,6 +33,7 @@ const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms))
             return a.id, '=>', a.name
         })
 
+        console.log()
         let userID = null
         try {
             userID = prompt('Choose: ')
@@ -44,8 +45,7 @@ const sleep = (ms = 2000) => new Promise((r) => setTimeout(r, ms))
 
         console.log(
             '\nChecking Result of'.green,
-            `${checking?.name}`.cyan.underline,
-            'Please wait...'.yellow
+            `${checking?.name}`.magenta.underline
         )
 
         boidInfo.map(async (user) => {
